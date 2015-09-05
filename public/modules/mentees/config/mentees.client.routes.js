@@ -42,7 +42,7 @@ angular.module('mentees').config(['$stateProvider',
 			templateUrl: 'modules/mentees/views/dashboard/dashboard.mentors.view.html'
 		}).
 		state('mentee', {
-			url: '/mentees/:mentee_id/profile',
+			url: '/mentees/:mentee_id',
 			templateUrl: 'modules/mentees/views/dashboard/mentee_profile.client.view.html'
 		}).
 		state('mentees/reset', {
