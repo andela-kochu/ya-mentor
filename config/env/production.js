@@ -7,6 +7,7 @@ module.exports = {
 			css: [
 				'public/lib/bootstrap/dist/css/bootstrap.min.css',
 				'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
+				'https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic'
 			],
 			js: [
 				'public/lib/angular/angular.min.js',
