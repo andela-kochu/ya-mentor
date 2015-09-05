@@ -30,6 +30,8 @@ exports.create = function(req, res) {
  * Show the current mentor
  */
 exports.read = function(req, res) {
+  console.log('sagadsgdasgasd');
+
   res.json(req.mentor);
 };
 
@@ -64,7 +66,7 @@ exports.delete = function(req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json(mentor);
+      res.json({mentor: mentor, status: 'deleted'});
     }
   });
 };
@@ -230,7 +232,7 @@ exports.downvoteMentor = function(req, res, next, id) {
  // * Mentor authorization middleware
  // */
 exports.hasAuthorization = function(req, res, next) {
-  if (req.mentor.user.id !== req.user.id) {
+  if (req.mentor.id !== req.user.id) {
     return res.status(403).send({
       message: 'User is not authorized'
     });
