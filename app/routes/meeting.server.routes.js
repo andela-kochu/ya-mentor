@@ -7,7 +7,7 @@ var users = require('../../app/controllers/users.server.controller'),
 	meetings = require('../../app/controllers/meetings.server.controller');
 
 module.exports = function(app) {
-	app.route('/meetings')
+	app.route('/meetings/user/:id')
 		.get(users.requiresLogin, meetings.listMyMeetings)
 		.post(users.requiresLogin, meetings.create);
 
