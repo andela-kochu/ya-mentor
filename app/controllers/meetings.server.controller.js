@@ -9,7 +9,8 @@ var mongoose = require('mongoose'),
 	_ = require('lodash');
 
 
-exports.create = function(req, res) {
+exports.create = function(req, res, id) {
+	
 	var meeting = new Meeting(req.body);
 	meeting.users.push(req.user);
 	meeting.status = 0
@@ -20,6 +21,9 @@ exports.create = function(req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
+			//find user by id and include details in text
+	var text =  ' --- has requested to connect with you';
+        notif.create(id, text);
 			res.json(meeting);
 		}
 	});
