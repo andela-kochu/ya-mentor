@@ -39,14 +39,12 @@ exports.list = function(req, res) {
 };
 
 
-
 exports.read = function(req, res) {
 	res.json(req.learner);
 };
 
 
 exports.update = function(req, res) {
-	console.log(3)
 	var learner = req.learner;
 
 	learner = _.extend(learner, req.body);
@@ -89,13 +87,13 @@ exports.checkPermission = function(req, res, next) {
 	if(req.user.id==req.learner.id){
 		next();
 	}else{
-		res.send(403, {message: "Unauthorized"})
+		res.send(403, {message: 'Unauthorized'});
 	}
 };
 
 //
 exports.getRequests = function(req, res){
-	Mentor.find({requests: {$elemMatch: {from: req.user.id, status: 'pending'}}}).where({role: "mentor"}).populate('requests.from').exec(function(err, mentors){
+	Mentor.find({requests: {$elemMatch: {from: req.user.id, status: 'pending'}}}).where({role: 'mentor'}).populate('requests.from').exec(function(err, mentors){
 		if(err){
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -108,7 +106,7 @@ exports.getRequests = function(req, res){
 
 
 exports.listMentors = function(req, res){
-	Mentor.find({requests: {$elemMatch: {from: req.user.id, status: 'accepted'}}}).where({role: "mentor"}).populate('requests.from').exec(function(err, mentors){
+	Mentor.find({requests: {$elemMatch: {from: req.user.id, status: 'accepted'}}}).where({role: 'mentor'}).populate('requests.from').exec(function(err, mentors){
 		if(err){
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)

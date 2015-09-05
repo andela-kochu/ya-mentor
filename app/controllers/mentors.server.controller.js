@@ -5,6 +5,7 @@
  */
 var mongoose = require('mongoose'),
   errorHandler = require('./errors.server.controller'),
+  notif = require('./notification.server.controller'),
   Mentor = mongoose.model('Mentor'),
   _ = require('lodash');
 
@@ -138,10 +139,10 @@ exports.requestMentor = function(req, res) {
 
     if (mentor.requests.length) {
       var match = _.find(mentor.requests, function(request) {
-        debugger;
+
         return request.from.toString() === req.user.id;
-      })
-      if (typeof match !== 'undefined') {
+      });
+      if (typeof match == 'undefined') {
         return res.status(400).send({
           message: 'You already requested this mentor'
         });
@@ -158,8 +159,12 @@ exports.requestMentor = function(req, res) {
           message: errorHandler.getErrorMessage(err)
         });
       } else {
+
+        var text = req.user.firstName+' '+req.user.lastName+' has requested to connect with you';
+        notif.create(mentor.id, text);
+
         res.status(200).send({
-          message: 'Request succesfully sent'
+          message: 'Request succesfully sent',
         });
       }
     });
@@ -194,8 +199,10 @@ exports.acceptRequest = function(req, res) {
             message: errorHandler.getErrorMessage(err)
           });
         } else {
+          var text = mentor.firstName+' '+mentor.lastName+' has accepted your request for mentorship';
+          notif.create(req.user.id, text);
           res.status(200).send({
-            message: 'Request has been accepted'
+            message: 'Request has been accepted',
           });
         }
       });
@@ -205,7 +212,7 @@ exports.acceptRequest = function(req, res) {
 
 exports.declineRequest = function(req, res, next, id) {
   Mentor.find({
-    _id: request.mentor.id
+    _id: req.mentor.id
   }).select({
     requests: {
       $elemMatch: {
@@ -230,6 +237,8 @@ exports.declineRequest = function(req, res, next, id) {
             message: errorHandler.getErrorMessage(err)
           });
         } else {
+          var text = mentor.firstName+' '+mentor.lastName+' has rejected your request for mentorship';
+          notif.create(req.user.id, text);
           res.status(200).send({
             message: 'Request has been declined'
           });
@@ -240,7 +249,6 @@ exports.declineRequest = function(req, res, next, id) {
 };
 
 exports.upvoteMentor = function(req, res) {
-  console.log('htii')
     // Mentor.findById(req.mentor.id, function(err, mentor) {
     //   if (err) {
     //     return res.status(400).send({

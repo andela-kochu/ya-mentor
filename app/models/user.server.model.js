@@ -22,6 +22,20 @@ var validateLocalStrategyPassword = function(password) {
   return (this.provider !== 'local' || (password && password.length > 6));
 };
 
+var NotificationSchema = new Schema({
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  },
+  text: {
+    type: String
+  },
+  status: {
+    type: Number,
+    default: 0
+  },
+});
+
 var RequestSchema = new Schema({
   from: {
     type: Schema.ObjectId,
@@ -30,7 +44,7 @@ var RequestSchema = new Schema({
   status: {
     type: String,
     enum: ['pending', 'accepted', 'rejected']
-  },
+  }
 });
 
 /**
@@ -289,3 +303,4 @@ mongoose.model('User', UserSchema);
 mongoose.model('Mentor', MentorSchema);
 mongoose.model('Learner', LearnerSchema);
 mongoose.model('Request', RequestSchema);
+mongoose.model('Notification', NotificationSchema);
