@@ -1,7 +1,7 @@
 'use strict';
 
 // Authentication service for user variables
-angular.module('users').factory('Authentication', [
+angular.module('mentors').factory('Authentication', [
 	function() {
 		var _this = this;
 

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication',
-	function($scope, $http, $location, Users, Authentication) {
+angular.module('mentors').controller('SettingsController', ['$scope', '$http', '$location', 'mentors', 'Authentication',
+	function($scope, $http, $location, mentors, Authentication) {
 		$scope.user = Authentication.user;
 
 		// If user is not signed in then redirect back home
@@ -22,10 +22,10 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 		};
 
 		// Remove a user social account
-		$scope.removeUserSocialAccount = function(provider) {
+		$scope.removementorsocialAccount = function(provider) {
 			$scope.success = $scope.error = null;
 
-			$http.delete('/users/accounts', {
+			$http.delete('/mentors/accounts', {
 				params: {
 					provider: provider
 				}
@@ -42,7 +42,7 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 		$scope.updateUserProfile = function(isValid) {
 			if (isValid) {
 				$scope.success = $scope.error = null;
-				var user = new Users($scope.user);
+				var user = new mentors($scope.user);
 
 				user.$update(function(response) {
 					$scope.success = true;
@@ -59,7 +59,7 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 		$scope.changeUserPassword = function() {
 			$scope.success = $scope.error = null;
 
-			$http.post('/users/password', $scope.passwordDetails).success(function(response) {
+			$http.post('/mentors/password', $scope.passwordDetails).success(function(response) {
 				// If successful show success message and clear form
 				$scope.success = true;
 				$scope.passwordDetails = null;
