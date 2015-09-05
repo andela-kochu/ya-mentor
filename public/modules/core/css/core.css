@@ -1,3 +1,6 @@
+body {
+  background-color: #E3E9F2;
+}
 button, select, html, textarea, input {
   font-family: RobotoDraft, 'Roboto', 'Helvetica Neue', sans-serif; 
 }
@@ -16,10 +19,6 @@ button, select, html, textarea, input {
 .ng-valid.ng-dirty {
 	border-color: #78FA89;
 }
-
-body {
-  background-color: #E3E9F2;
-
 .navbar {
   background-color: #009688 !important;
   color: white
