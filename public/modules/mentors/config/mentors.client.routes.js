@@ -25,8 +25,8 @@ angular.module('mentors').config(['$stateProvider',
 			url: '/role',
 			templateUrl: 'modules/mentors/views/authentication/signup.role.view.html'
 		}).
-		state('mentor-signin', {
-			url: '/mentor-signin',
+		state('signin', {
+			url: '/signin',
 			templateUrl: 'modules/mentors/views/authentication/signin.client.view.html'
 		}).
 		state('newSignup', {
