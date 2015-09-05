@@ -30,8 +30,6 @@ exports.create = function(req, res) {
  * Show the current mentor
  */
 exports.read = function(req, res) {
-  console.log('sagadsgdasgasd');
-
   res.json(req.mentor);
 };
 
@@ -216,7 +214,6 @@ exports.acceptRequest = function(req, res) {
   });
 };
 
-
 exports.declineRequest = function(req, res) {
   var query = {
     'requests._id': req.params.requestId,
@@ -239,7 +236,6 @@ exports.declineRequest = function(req, res) {
 
 exports.upvoteMentor = function(req, res) {
   Mentor.findById(req.mentor.id, function(err, mentor) {
-
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -270,11 +266,11 @@ exports.upvoteMentor = function(req, res) {
           message: 'You have upvoted this mentor'
         });
       }
-    });
-
+    })
   });
 };
 
+<<<<<<< HEAD
 // exports.downvoteMentor = function(req, res, next, id) {
 //   Mentor.findById(req.mentor.id, function(err, mentor) {
 //     if (err) {
