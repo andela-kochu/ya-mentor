@@ -1,14 +1,16 @@
-<div data-ng-controller="MentorController" class="container">
-    <h2 class="light">Mentors</h2>
+
+<div data-ng-controller="menteeCntrl" class="container">
+    <h2 class="light">Mentees</h2>
     <hr/>
     <div class="row">
-        <div ng-if="mentor" ng-repeat="mentor in mentors" class="col-xs-6 col-sm-3">
-            <a ng-href="/#!/mentor/{{mentor.uid}}">
+        <div ng-if="mentees" ng-repeat="mentee in mentees" class="col-xs-6 col-sm-3">
+            <a ng-href="/#!/mentees/{{mentee.id}}">
                 <div class="user-wrap">
-                    <div class="profile-pic"><span class="f-badge">M</span><img ng-src="{{mentor.picture}}" /></div>
+                    <div class="profile-pic"><span class="f-badge">M</span><img ng-src="{{mentee.picture}}" /></div>
                     <div class="user-name">
-                        <h5 class="text-wrap">{{mentor.fullName}}</h5>
-                        <p class="text-muted text-wrap">{{mentor.email}}</p>
+                        <h5 class="text-wrap">{{mentee.name}}</h5>
+                        <p class="text-muted text-wrap">{{mentee.email}}</p>
+                        <p class="text-muted text-wrap">{{mentee.stuff}}</p>
                     </div>
                 </div>
             </a>

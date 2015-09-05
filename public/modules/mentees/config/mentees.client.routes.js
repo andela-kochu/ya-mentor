@@ -37,13 +37,13 @@ angular.module('mentees').config(['$stateProvider',
 			url: '/password/reset/mentee-success',
 			templateUrl: 'modules/mentees/views/password/reset-password-success.client.view.html'
 		}).
-		state('mentee-mentors', {
-			url: '/mentee-mentors',
-			templateUrl: 'modules/mentees/views/dashboard/dashboard.mentors.view.html'
+		state('mentees', {
+			url: '/mentees',
+			templateUrl: 'modules/mentees/views/dashboard/dashboard.mentees.view.html'
 		}).
-		state('mentee-mentee', {
-			url: '/mentees/:mentee_id/mentee-profile',
-			templateUr: 'modules/mentees/views/dashboard/mentee_profile.view.html'
+		state('mentee', {
+			url: '/mentees/:mentee_id',
+			templateUrl: 'modules/mentees/views/dashboard/mentee_profile.client.view.html'
 		}).
 		state('mentee-reset', {
 			url: '/password/reset/:token',

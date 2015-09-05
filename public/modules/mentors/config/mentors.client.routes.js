@@ -34,8 +34,12 @@ angular.module('mentors').config(['$stateProvider',
 			templateUrl: 'modules/mentors/views/authentication/signin.client.view.html'
 		}).
 		state('mentors', {
-			url: '/mentor-mentors',
+			url: '/mentors',
 			templateUrl: 'modules/mentors/views/dashboard/dashboard.mentors.view.html'
+		}).
+		state('mentor', {
+			url: '/mentor/:mentor_id',
+			templateUrl: 'modules/mentors/views/profile/mentor.profile.view.html'
 		}).
 		state('forgot', {
 			url: '/password/forgot',
