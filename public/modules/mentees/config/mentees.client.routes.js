@@ -5,47 +5,47 @@ angular.module('mentees').config(['$stateProvider',
 	function($stateProvider) {
 		// mentees state routing
 		$stateProvider.
-		state('profile', {
-			url: '/settings/profile',
+		state('mentee-profile', {
+			url: '/settings/mentee-profile',
 			templateUrl: 'modules/mentees/views/settings/edit-profile.client.view.html'
 		}).
-		state('password', {
-			url: '/settings/password',
+		state('mentee-password', {
+			url: '/settings/mentee-password',
 			templateUrl: 'modules/mentees/views/settings/change-password.client.view.html'
 		}).
-		state('accounts', {
-			url: '/settings/accounts',
+		state('mentee-accounts', {
+			url: '/settings/mentee-accounts',
 			templateUrl: 'modules/mentees/views/settings/social-accounts.client.view.html'
 		}).
-		state('signup', {
-			url: '/signup',
+		state('mentee-signup', {
+			url: '/mentee-signup',
 			templateUrl: 'modules/mentees/views/authentication/signup.client.view.html'
 		}).
-		state('signin', {
-			url: '/signin',
+		state('mentee-signin', {
+			url: '/mentee-signin',
 			templateUrl: 'modules/mentees/views/authentication/signin.client.view.html'
 		}).
-		state('forgot', {
-			url: '/password/forgot',
+		state('mentee-forgot', {
+			url: '/password/mentee-forgot',
 			templateUrl: 'modules/mentees/views/password/forgot-password.client.view.html'
 		}).
-		state('reset-invalid', {
-			url: '/password/reset/invalid',
+		state('mentee-reset-invalid', {
+			url: '/password/reset/mentee-invalid',
 			templateUrl: 'modules/mentees/views/password/reset-password-invalid.client.view.html'
 		}).
-		state('reset-success', {
-			url: '/password/reset/success',
+		state('mentee-reset-success', {
+			url: '/password/reset/mentee-success',
 			templateUrl: 'modules/mentees/views/password/reset-password-success.client.view.html'
 		}).
-		state('mentors', {
-			url: '/mentors',
+		state('mentee-mentors', {
+			url: '/mentee-mentors',
 			templateUrl: 'modules/mentees/views/dashboard/dashboard.mentors.view.html'
 		}).
-		state('mentee', {
-			url: '/mentees/:mentee_id/profile',
+		state('mentee-mentee', {
+			url: '/mentees/:mentee_id/mentee-profile',
 			templateUr: 'modules/mentees/views/dashboard/mentee_profile.view.html'
 		}).
-		state('reset', {
+		state('mentee-reset', {
 			url: '/password/reset/:token',
 			templateUrl: 'modules/mentees/views/password/reset-password.client.view.html'
 		});
