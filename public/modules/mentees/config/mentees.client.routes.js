@@ -5,8 +5,8 @@ angular.module('mentees').config(['$stateProvider',
 	function($stateProvider) {
 		// mentees state routing
 		$stateProvider.
-		state('mentee-profile', {
-			url: '/settings/mentee-profile',
+		state('mentees/profile', {
+			url: '/settings/mentees/profile',
 			templateUrl: 'modules/mentees/views/settings/edit-profile.client.view.html'
 		}).
 		state('mentees/password', {

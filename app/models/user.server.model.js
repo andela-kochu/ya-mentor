@@ -98,6 +98,9 @@ var UserSchema = new Schema({
     type: String,
     default: ''
   },
+  phone: {
+    type: String
+  },
   photo: {
     type: String,
     default: ''
