@@ -18,23 +18,24 @@ module.exports = function(app) {
     .put(users.requiresLogin, mentors.hasAuthorization, mentors.update)
     .delete(users.requiresLogin, mentors.hasAuthorization, mentors.delete);
 
+  app.route('/mentors/:mentorId/requests')
+    .get(users.requiresLogin, mentors.hasAuthorization, mentors.getRequests)
+    .post(users.requiresLogin, mentors.requestMentor);
+
   app.route('/mentors/:mentorId/upvote')
     .post(mentors.upvoteMentor);
 
   app.route('/mentors/:mentorId/downvote')
     .post(mentors.downvoteMentor);
 
-  app.route('/mentors/:id/requests')
-    .get(users.requiresLogin, mentors.hasAuthorization, mentors.getRequests)
-    .post(mentors.requestMentor);
 
-  app.route('/mentors/:id/learners')
+  app.route('/mentors/:mentorId/learners')
     .get(users.requiresLogin, mentors.hasAuthorization, mentors.getLearners);
 
-  app.route('/mentors/:id/requests/:id/accept')
+  app.route('/mentors/:mentorId/requests/:requestId/accept')
     .post(users.requiresLogin, mentors.hasAuthorization, mentors.acceptRequest);
 
-  app.route('/mentors/:id/requests/:id/decline')
+  app.route('/mentors/:mentorId/requests/:requestId/decline')
     .post(users.requiresLogin, mentors.hasAuthorization, mentors.declineRequest);
 
 

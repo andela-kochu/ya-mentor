@@ -66,7 +66,10 @@ exports.delete = function(req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json({mentor: mentor, status: 'deleted'});
+      res.json({
+        mentor: mentor,
+        status: 'deleted'
+      });
     }
   });
 };
@@ -75,7 +78,9 @@ exports.delete = function(req, res) {
  * List of Mentors
  */
 exports.list = function(req, res) {
-  Mentor.find().sort('-created').populate('user', 'userName').exec(function(err, mentors) {
+  Mentor.find().where({
+    role: 'mentor'
+  }).sort('-created').populate('user', 'userName').exec(function(err, mentors) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -98,8 +103,8 @@ exports.mentorByID = function(req, res, next, id) {
   });
 };
 
-exports.getRequests = function(req, res, next, id) {
-  Mentor.find({_id: id}).select({requests: { $elemMatch: {from: req.user, status: 'accepted'}}}).exec(function(err, mentor) {
+exports.getRequests = function(req, res) {
+  Mentor.find({_id: req.mentor.id}, {requests: { $elemMatch: {status: 'pending'}}}).populate('requests.from').exec(function(err, mentor) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -110,8 +115,8 @@ exports.getRequests = function(req, res, next, id) {
   });
 };
 
-exports.getLearners = function(req, res, next, id) {
-  Mentor.find({_id: id}).select({requests: { $elemMatch: {from: req.user, status: 'accepted'}}}).exec(function(err, mentor) {
+exports.getLearners = function(req, res) {
+  Mentor.find({_id: req.mentor.id}, {requests: { $elemMatch: {status: 'accepted'}}}).exec(function(err, mentor) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -123,47 +128,75 @@ exports.getLearners = function(req, res, next, id) {
 
 };
 
-exports.requestMentor = function(req, res, next, id) {
-  var learnerId = req.user;
-  var mentorId = id;
-
-  Mentor.findById(mentorId, function (err, mentor) {
+exports.requestMentor = function(req, res) {
+  Mentor.findById(req.mentor.id, function(err, mentor) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
-    } else {
-      mentor.requests = { 'from': learnerId, 'status': 'pending'};
-
-      mentor.save(function (err) {
-        if (err) {
-          return res.status(400).send({
-            message: errorHandler.getErrorMessage(err)
-          });
-        } else {
-          res.status(200).send({message: 'Request succesfully sent'});
-        }
-      });
     }
+
+    if (mentor.requests.length) {
+      var match = _.find(mentor.requests, function(request) {
+        debugger;
+        return request.from.toString() === req.user.id;
+      })
+      if (typeof match !== 'undefined') {
+        return res.status(400).send({
+          message: 'You already requested this mentor'
+        });
+      }
+    }
+    mentor.requests.push({
+      'from': req.user.id,
+      'status': 'pending'
+    });
+
+    mentor.save(function(err) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        res.status(200).send({
+          message: 'Request succesfully sent'
+        });
+      }
+    });
+
   });
 };
 
-exports.acceptRequest = function(req, res, next, id) {
-  Mentor.find({_id: id}).select({requests: { $elemMatch: {from: req.user, status: 'pending'}}}).exec(function(err, mentor) {
+exports.acceptRequest = function(req, res) {
+  Mentor.find({
+    _id: req.mentor.id
+  }).select({
+    requests: {
+      $elemMatch: {
+        from: req.user.id,
+        status: 'pending'
+      }
+    }
+  }).exec(function(err, mentor) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      mentor.requests = { 'from' : req.user, 'status': 'accepted'};
+      mentor.requests = {
+        'from': req.user.id,
+        'status': 'accepted'
+      };
 
-      mentor.save(function (err) {
+      mentor.save(function(err) {
         if (err) {
           return res.status(400).send({
             message: errorHandler.getErrorMessage(err)
           });
         } else {
-          res.status(200).send({message: 'Request has been accepted'});
+          res.status(200).send({
+            message: 'Request has been accepted'
+          });
         }
       });
     }
@@ -171,66 +204,85 @@ exports.acceptRequest = function(req, res, next, id) {
 };
 
 exports.declineRequest = function(req, res, next, id) {
-  Mentor.find({_id: id}).select({requests: { $elemMatch: {from: req.user, status: 'pending'}}}).exec(function(err, mentor) {
+  Mentor.find({
+    _id: request.mentor.id
+  }).select({
+    requests: {
+      $elemMatch: {
+        from: req.user.id,
+        status: 'pending'
+      }
+    }
+  }).exec(function(err, mentor) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      mentor.requests = { 'from': req.user, 'status': 'rejected'};
+      mentor.requests = {
+        'from': req.user,
+        'status': 'rejected'
+      };
 
-      mentor.save(function (err) {
+      mentor.save(function(err) {
         if (err) {
           return res.status(400).send({
             message: errorHandler.getErrorMessage(err)
           });
         } else {
-          res.status(200).send({message: 'Request has been declined'});
+          res.status(200).send({
+            message: 'Request has been declined'
+          });
         }
       });
     }
   });
 };
 
-exports.upvoteMentor = function(req, res, next, id) {
-  Mentor.findById(id, function(err, mentor) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      mentor.reviews.push(req.user);
+exports.upvoteMentor = function(req, res) {
+  console.log('htii')
+    // Mentor.findById(req.mentor.id, function(err, mentor) {
+    //   if (err) {
+    //     return res.status(400).send({
+    //       message: errorHandler.getErrorMessage(err)
+    //     });
+    //   } else {
+    //     mentor.reviews.push(req.user.id);
 
-      res.status(200).send({message: 'You have updated your mentor'});
-    }
+  //     res.status(200).send({message: 'You have updated your mentor'});
+  //   }
 
-  });
+  // });
 };
 
 exports.downvoteMentor = function(req, res, next, id) {
-  Mentor.findById(id, function(err, mentor) {
+  Mentor.findById(req.mentor.id, function(err, mentor) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
 
-      var index = mentor.reviews.indexOf(req.user);
+      var index = mentor.reviews.indexOf(req.user.id);
 
       if (index > -1) {
 
         mentor.reviews.splice(index, 1);
-        return res.status(200).send({message: 'You have downvoted your mentor'});
+        return res.status(200).send({
+          message: 'You have downvoted your mentor'
+        });
 
       } else {
-        res.status(403).send({message: 'You cannot downcote this user'});
+        res.status(403).send({
+          message: 'You cannot downcote this user'
+        });
       }
     }
   });
 };
 
- // * Mentor authorization middleware
- // */
+// * Mentor authorization middleware
+// */
 exports.hasAuthorization = function(req, res, next) {
   if (req.mentor.id !== req.user.id) {
     return res.status(403).send({
