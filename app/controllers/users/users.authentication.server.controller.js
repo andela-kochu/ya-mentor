@@ -23,7 +23,7 @@ exports.signup = function(req, res) {
 
     // Add missing user fields
     learner.provider = 'local';
-    debugger;
+    // debugger;
     // Then save the user
     learner.save(function(err) {
       if (err) {
@@ -50,7 +50,7 @@ exports.signup = function(req, res) {
 
   	// Add missing user fields
   	mentor.provider = 'local';
-  	debugger;
+  	// debugger;
   	// Then save the user
   	mentor.save(function(err) {
   	  if (err) {
