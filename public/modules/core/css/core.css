@@ -163,3 +163,8 @@ input {
 .btn-primary1 {
  background-color: #009688;
  }
+
+.google-btn {
+   width:300px;
+   height:60px;
+}

@@ -9,16 +9,16 @@ angular.module('mentors').config(['$stateProvider',
 			url: '/settings/mentor-profile',
 			templateUrl: 'modules/mentors/views/settings/edit-profile.client.view.html'
 		}).
-		state('mentor-password', {
-			url: '/settings/mentor-password',
+		state('mentors/password', {
+			url: '/settings/mentors/password',
 			templateUrl: 'modules/mentors/views/settings/change-password.client.view.html'
 		}).
-		state('mentor-accounts', {
-			url: '/settings/mentor-accounts',
+		state('mentors/accounts', {
+			url: '/settings/mentors/accounts',
 			templateUrl: 'modules/mentors/views/settings/social-accounts.client.view.html'
 		}).
-		state('mentor-signup', {
-			url: '/mentor-signup',
+		state('mentors/signup', {
+			url: '/mentors/signup',
 			templateUrl: 'modules/mentors/views/authentication/signup.client.view.html'
 		}).
 		state('chooseRole', {
@@ -29,17 +29,9 @@ angular.module('mentors').config(['$stateProvider',
 			url: '/signin',
 			templateUrl: 'modules/mentors/views/authentication/signin.client.view.html'
 		}).
-		state('newSignup', {
-			url: '/mentor-newSignup',
-			templateUrl: 'modules/mentors/views/authentication/signin.client.view.html'
-		}).
 		state('mentors', {
 			url: '/mentors',
 			templateUrl: 'modules/mentors/views/dashboard/dashboard.mentors.view.html'
-		}).
-		state('mentor', {
-			url: '/mentor/:mentor_id',
-			templateUrl: 'modules/mentors/views/profile/mentor.profile.view.html'
 		}).
 		state('forgot', {
 			url: '/password/forgot',
