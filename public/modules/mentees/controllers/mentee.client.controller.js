@@ -1,4 +1,4 @@
-angular.module('mentees').controller('menteeCntrl', ['$scope', function($scope) {
+angular.module('mentees').controller('menteeCntrl', ['$scope','$stateParams', function($scope, $stateParams) {
   
   $scope.mentees = [
     {
