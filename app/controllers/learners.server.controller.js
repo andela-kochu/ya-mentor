@@ -44,6 +44,7 @@ exports.read = function(req, res) {
 
 
 exports.update = function(req, res) {
+	console.log(3)
 	var learner = req.learner;
 
 	learner = _.extend(learner, req.body);
@@ -82,28 +83,36 @@ exports.learnerByID = function(req, res, next, id) {
 	});
 };
 
-
-exports.getRequests = function(req, res, next, id){
-	Mentors.find({_id: id}).select({requests: {$elemMatch: {from: req.user, status: 'pending'}}}).populate('requests.from').exec(function(err, mentors){
-		if(err){
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else{
-			res.json(mentors);
-		}
-	});
+exports.checkPermission = function(req, res, next, id) {
+	if(req.user._id==req.learner._id){
+		next();
+	}else{
+		res.send(403, {message: "Unauthorized"})
+	}
 };
 
-
-exports.listMentors = function(req, res, next, id){
-	Mentors.find({_id: id}).select({requests: {$elemMatch: {from: req.user, status: 'accepted'}}}).populate('requests.from').exec(function(err, mentors){
-		if(err){
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else{
-			res.json(mentors);
-		}
-	});
-};
+//
+// exports.getRequests = function(req, res, next, id){
+// 	Mentors.find({_id: id}).select({requests: {$elemMatch: {from: req.user, status: 'pending'}}}).populate('requests.from').exec(function(err, mentors){
+// 		if(err){
+// 			return res.status(400).send({
+// 				message: errorHandler.getErrorMessage(err)
+// 			});
+// 		} else{
+// 			res.json(mentors);
+// 		}
+// 	});
+// };
+//
+//
+// exports.listMentors = function(req, res, next, id){
+// 	Mentors.find({_id: id}).select({requests: {$elemMatch: {from: req.user, status: 'accepted'}}}).populate('requests.from').exec(function(err, mentors){
+// 		if(err){
+// 			return res.status(400).send({
+// 				message: errorHandler.getErrorMessage(err)
+// 			});
+// 		} else{
+// 			res.json(mentors);
+// 		}
+// 	});
+// };

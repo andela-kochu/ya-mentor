@@ -14,14 +14,14 @@ module.exports = function(app) {
 
 	app.route('/learners/:learnerId')
 		.get(learners.read)
-		.put(users.requiresLogin, learners.hasAuthorization, learners.update)
-		.delete(users.requiresLogin, learners.hasAuthorization, learners.delete);
+		.put(users.requiresLogin, learners.checkPermission, learners.update)
+		.delete(users.requiresLogin, learners.checkPermission, learners.delete);
 
-	app.route('/learners/:id/requests')
-		.get(users.requiresLogin, learners.hasAuthorization, learners.getRequests);
+	// app.route('/learners/:id/requests')
+	// 	.get(users.requiresLogin, users.hasAuthorization, learners.getRequests);
 
-	app.route('/learners/:id/mentors')
-		.get(users.requiresLogin, learners.hasAuthorization, learners.listMentors);
+	// app.route('/learners/:id/mentors')
+	// 	.get(users.requiresLogin, users.hasAuthorization, learners.listMentors);
 
 	// Finish by binding the article middleware
 	app.param('learnerId', learners.learnerByID);

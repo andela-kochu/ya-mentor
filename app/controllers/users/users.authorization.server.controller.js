@@ -17,6 +17,7 @@ exports.userByID = function(req, res, next, id) {
 		if (err) return next(err);
 		if (!user) return next(new Error('Failed to load User ' + id));
 		req.profile = user;
+
 		next();
 	});
 };
@@ -42,7 +43,12 @@ exports.hasAuthorization = function(roles) {
 
 	return function(req, res, next) {
 		_this.requiresLogin(req, res, function() {
+
+
+
 			if (_.intersection(req.user.roles, roles).length) {
+
+
 				return next();
 			} else {
 				return res.status(403).send({
