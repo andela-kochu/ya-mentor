@@ -103,8 +103,29 @@ exports.mentorByID = function(req, res, next, id) {
   });
 };
 
+/**
+ * Request middleware
+ */
+exports.requestByID = function(req, res, next, id) {
+  Request.findById(id).populate('user', 'userName').exec(function(err, request) {
+    if (err) return next(err);
+    if (!request) return next(new Error('Failed to load request ' + id));
+    req.request = request;
+    next();
+  });
+};
+
+
 exports.getRequests = function(req, res) {
-  Mentor.find({_id: req.mentor.id}, {requests: { $elemMatch: {status: 'pending'}}}).populate('requests.from').exec(function(err, mentor) {
+  Mentor.find({
+    _id: req.mentor.id
+  }, {
+    requests: {
+      $elemMatch: {
+        status: 'pending'
+      }
+    }
+  }).populate('requests.from').exec(function(err, mentor) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -116,7 +137,15 @@ exports.getRequests = function(req, res) {
 };
 
 exports.getLearners = function(req, res) {
-  Mentor.find({_id: req.mentor.id}, {requests: { $elemMatch: {status: 'accepted'}}}).exec(function(err, mentor) {
+  Mentor.find({
+    _id: req.mentor.id
+  }, {
+    requests: {
+      $elemMatch: {
+        status: 'accepted'
+      }
+    }
+  }).exec(function(err, mentor) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
@@ -168,118 +197,145 @@ exports.requestMentor = function(req, res) {
 };
 
 exports.acceptRequest = function(req, res) {
-  Mentor.find({
-    _id: req.mentor.id
-  }).select({
-    requests: {
-      $elemMatch: {
-        from: req.user.id,
-        status: 'pending'
-      }
-    }
-  }).exec(function(err, mentor) {
+  var query = {
+    'requests._id': req.params.requestId,
+    'requests.status': "pending"
+  }
+
+  var update = { 'requests.$.status': "accepted" }
+  Mentor.update(query, update, function(err, rawMessage) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      mentor.requests = {
-        'from': req.user.id,
-        'status': 'accepted'
-      };
-
-      mentor.save(function(err) {
-        if (err) {
-          return res.status(400).send({
-            message: errorHandler.getErrorMessage(err)
-          });
-        } else {
-          res.status(200).send({
-            message: 'Request has been accepted'
-          });
-        }
+      res.status(200).send({
+        message: 'Request has been accepted'
       });
     }
   });
 };
 
-exports.declineRequest = function(req, res, next, id) {
-  Mentor.find({
-    _id: request.mentor.id
-  }).select({
-    requests: {
-      $elemMatch: {
-        from: req.user.id,
-        status: 'pending'
-      }
-    }
-  }).exec(function(err, mentor) {
+
+exports.declineRequest = function(req, res) {
+  var query = {
+    'requests._id': req.params.requestId,
+    'requests.status': "pending"
+  }
+
+  var update = { 'requests.$.status': "rejected" }
+  Mentor.update(query, update, function(err, rawMessage) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      mentor.requests = {
-        'from': req.user,
-        'status': 'rejected'
-      };
-
-      mentor.save(function(err) {
-        if (err) {
-          return res.status(400).send({
-            message: errorHandler.getErrorMessage(err)
-          });
-        } else {
-          res.status(200).send({
-            message: 'Request has been declined'
-          });
-        }
+      res.status(200).send({
+        message: 'Request has been declined'
       });
     }
   });
 };
 
 exports.upvoteMentor = function(req, res) {
-  console.log('htii')
-    // Mentor.findById(req.mentor.id, function(err, mentor) {
-    //   if (err) {
-    //     return res.status(400).send({
-    //       message: errorHandler.getErrorMessage(err)
-    //     });
-    //   } else {
-    //     mentor.reviews.push(req.user.id);
-
-  //     res.status(200).send({message: 'You have updated your mentor'});
-  //   }
-
-  // });
-};
-
-exports.downvoteMentor = function(req, res, next, id) {
   Mentor.findById(req.mentor.id, function(err, mentor) {
+
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
       });
-    } else {
+    }
 
-      var index = mentor.reviews.indexOf(req.user.id);
-
-      if (index > -1) {
-
-        mentor.reviews.splice(index, 1);
-        return res.status(200).send({
-          message: 'You have downvoted your mentor'
-        });
-
-      } else {
-        res.status(403).send({
-          message: 'You cannot downcote this user'
+    if (mentor.rating.length) {
+      var match = _.find(mentor.rating, function(rating) {
+        return rating.by.toString() === req.user.id;
+      })
+      if (typeof match !== 'undefined') {
+        return res.status(400).send({
+          message: 'You already upvoted this mentor'
         });
       }
     }
+    mentor.rating.push({
+      'by': req.user.id
+    });
+
+    mentor.save(function(err) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        res.status(200).send({
+          message: 'You have upvoted this mentor'
+        });
+      }
+    });
+
   });
 };
+
+// exports.downvoteMentor = function(req, res, next, id) {
+//   Mentor.findById(req.mentor.id, function(err, mentor) {
+//     if (err) {
+//       return res.status(400).send({
+//         message: errorHandler.getErrorMessage(err)
+//       });
+//     } else {
+
+//       var index = mentor.reviews.indexOf(req.user.id);
+
+//       if (index > -1) {
+
+//         mentor.reviews.splice(index, 1);
+//         return res.status(200).send({
+//           message: 'You have downvoted your mentor'
+//         });
+
+//       } else {
+//         res.status(403).send({
+//           message: 'You cannot downcote this user'
+//         });
+//       }
+//     }
+//   });
+
+//   Mentor.findById(req.mentor.id, function(err, mentor) {
+
+//     if (err) {
+//       return res.status(400).send({
+//         message: errorHandler.getErrorMessage(err)
+//       });
+//     }
+
+//     if (mentor.rating.length) {
+//       var match = _.find(mentor.rating, function(rating) {
+//         return rating.by.toString() === req.user.id;
+//       })
+//       if (typeof match !== 'undefined') {
+//         return res.status(400).send({
+//           message: 'You already upvoted this mentor'
+//         });
+//       }
+//     }
+//     mentor.rating.push({
+//       'by': req.user.id
+//     });
+
+//     mentor.save(function(err) {
+//       if (err) {
+//         return res.status(400).send({
+//           message: errorHandler.getErrorMessage(err)
+//         });
+//       } else {
+//         res.status(200).send({
+//           message: 'You have upvoted this mentor'
+//         });
+//       }
+//   });
+
+//   });
+// };
 
 // * Mentor authorization middleware
 // */
