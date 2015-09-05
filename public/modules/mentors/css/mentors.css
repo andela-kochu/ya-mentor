@@ -56,7 +56,7 @@ footer a:hover {
 }
 .content.mentors {
   color: #fff;
-  background: #0096ee;
+  background: #0B3531;
 }
 .user-wrap,
 .unit-wrap {
@@ -257,6 +257,7 @@ input[type="text"]:focus {
 }
 .mentor-info {
   padding-left: 3em;
+  margin-top: 3em;
 }
 .mentor-info .btn {
   padding: 10px 30px;

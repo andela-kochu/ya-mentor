@@ -1,10 +1,10 @@
 'use strict';
 
-angular.module('mentors').controller('MentorController', ['$scope', '$http', '$location', 'Authentication',
-  function($scope, $http, $location, Authentication) {
+angular.module('mentors').controller('MentorController', ['$scope', '$http', '$location', 'Authentication', 'Mentors', '$stateParams',
+  function($scope, $http, $location, Authentication, Mentors, $stateParams) {
     $scope.authentication = Authentication;
 
-    $scope.mentor = {
+    $scope.mentofr = {
       uid: 12434324343243,
       fullName: 'Ashikodi Emeka',
       email: 'onyi.emi89@yahoo.com',
@@ -16,14 +16,17 @@ angular.module('mentors').controller('MentorController', ['$scope', '$http', '$l
       location: 'sabo,nigeria',
       linkedInUrl: 'linkedInUrl',
       twitterHandle: 'twitterHandle',
-      Skype: 'Skype',
-      
+      Skype: 'Skype'
     };
-
-    // If user is signed in then redirect back home
-    if ($scope.authentication.user) $location.path('/');
-
-    $scope.mentors = [
+    $scope.mentors = Mentors.query();
+  $scope.find = function(){
+    $scope.mentor = Mentors.get({
+        mentorId: $stateParams.mentorId
+      });
+    console.log($scope.mentor);
+    }
+  };
+    $scope.mentfors = [
       {
         uid: 12434324343243,
         fullName: 'Ashikodi Emeka',

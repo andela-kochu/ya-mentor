@@ -3,12 +3,16 @@
     <hr/>
     <div class="row">
         <div ng-if="mentor" ng-repeat="mentor in mentors" class="col-xs-6 col-sm-3">
-            <a ng-href="/#!/mentor/{{mentor.uid}}">
+            <a ng-href="/#!/mentor/{{mentor._id}}">
                 <div class="user-wrap">
-                    <div class="profile-pic"><span class="f-badge">M</span><img ng-src="{{mentor.picture}}" /></div>
+                    <div class="profile-pic">
+                        <span class="f-badge">M</span><img  ng-hide="mentor.photo" ng-src="/modules/mentors/img/avatar.png" />
+                        </span><img ng-show="mentor.photo" ng-src="{{mentor.photo}}" />
+                    </div>
                     <div class="user-name">
-                        <h5 class="text-wrap">{{mentor.fullName}}</h5>
+                        <h5 class="text-wrap">{{mentor.firstName}} {{mentor.lastName}} </h5>
                         <p class="text-muted text-wrap">{{mentor.email}}</p>
+                        <p class="text-muted text-wrap">@{{mentor.username}}</p>
                     </div>
                 </div>
             </a>
