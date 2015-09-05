@@ -17,11 +17,11 @@ module.exports = function(app) {
 		.put(users.requiresLogin, learners.checkPermission, learners.update)
 		.delete(users.requiresLogin, learners.checkPermission, learners.delete);
 
-	// app.route('/learners/:id/requests')
-	// 	.get(users.requiresLogin, users.hasAuthorization, learners.getRequests);
+	app.route('/learners/:learnerId/requests')
+		.get(users.requiresLogin, learners.checkPermission, learners.getRequests);
 
-	// app.route('/learners/:id/mentors')
-	// 	.get(users.requiresLogin, users.hasAuthorization, learners.listMentors);
+	app.route('/learners/:learnerId/mentors')
+		.get(users.requiresLogin, learners.checkPermission, learners.listMentors);
 
 	// Finish by binding the article middleware
 	app.param('learnerId', learners.learnerByID);

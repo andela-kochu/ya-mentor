@@ -4,6 +4,8 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	Learner = mongoose.model('Learner'),
+	Mentor = mongoose.model('Mentor'),
+	Request = mongoose.model('Request'),
 	_ = require('lodash');
 
 
@@ -25,7 +27,7 @@ exports.create = function(req, res) {
 
 
 exports.list = function(req, res) {
-	Learner.find().sort('-created').exec(function(err, learners) {
+	Learner.find().where({role: 'learner'}).sort('-created').exec(function(err, learners) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -75,7 +77,7 @@ exports.delete = function(req, res) {
 };
 
 exports.learnerByID = function(req, res, next, id) {
-	Learner.findById(id).exec(function(err, learner) {
+	Learner.findById(id).where({role: 'learner'}).exec(function(err, learner) {
 		if (err) return next(err);
 		if (!learner) return next(new Error('Failed to find learner ' + id));
 		req.learner = learner;
@@ -83,8 +85,8 @@ exports.learnerByID = function(req, res, next, id) {
 	});
 };
 
-exports.checkPermission = function(req, res, next, id) {
-	if(req.user._id==req.learner._id){
+exports.checkPermission = function(req, res, next) {
+	if(req.user.id==req.learner.id){
 		next();
 	}else{
 		res.send(403, {message: "Unauthorized"})
@@ -92,27 +94,27 @@ exports.checkPermission = function(req, res, next, id) {
 };
 
 //
-// exports.getRequests = function(req, res, next, id){
-// 	Mentors.find({_id: id}).select({requests: {$elemMatch: {from: req.user, status: 'pending'}}}).populate('requests.from').exec(function(err, mentors){
-// 		if(err){
-// 			return res.status(400).send({
-// 				message: errorHandler.getErrorMessage(err)
-// 			});
-// 		} else{
-// 			res.json(mentors);
-// 		}
-// 	});
-// };
-//
-//
-// exports.listMentors = function(req, res, next, id){
-// 	Mentors.find({_id: id}).select({requests: {$elemMatch: {from: req.user, status: 'accepted'}}}).populate('requests.from').exec(function(err, mentors){
-// 		if(err){
-// 			return res.status(400).send({
-// 				message: errorHandler.getErrorMessage(err)
-// 			});
-// 		} else{
-// 			res.json(mentors);
-// 		}
-// 	});
-// };
+exports.getRequests = function(req, res){
+	Mentor.find({requests: {$elemMatch: {from: req.user.id, status: 'pending'}}}).where({role: "mentor"}).populate('requests.from').exec(function(err, mentors){
+		if(err){
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else{
+			res.json(mentors);
+		}
+	});
+};
+
+
+exports.listMentors = function(req, res){
+	Mentor.find({requests: {$elemMatch: {from: req.user.id, status: 'accepted'}}}).where({role: "mentor"}).populate('requests.from').exec(function(err, mentors){
+		if(err){
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else{
+			res.json(mentors);
+		}
+	});
+};
