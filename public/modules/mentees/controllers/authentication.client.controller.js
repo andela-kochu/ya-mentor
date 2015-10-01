@@ -9,13 +9,15 @@ angular.module('mentees').controller('AuthenticationController', ['$scope', '$ht
 
         $scope.signup = function(role) {
             $scope.credentials.role = role;
+            console.log($scope.credentials);
             $http.post('/auth/signup', $scope.credentials).success(function(response) {
                 // If successful we assign the response to the global user model
                 $scope.authentication.user = response;
 
                 // And redirect to the index page
-                $location.path('/mentors');
+                $location.path('/');
             }).error(function(response) {
+            	console.log(response);
                 $scope.error = response.message;
             });
         };

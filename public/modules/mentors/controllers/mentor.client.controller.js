@@ -5,10 +5,9 @@ angular.module('mentors').controller('MentorController', ['$scope', '$http', '$l
         $scope.authentication = Authentication;
 
         $scope.mentors = Mentors.query();
-        $scope.findOne = function() {
-            $scope.mentor = Mentors.get({
-                mentorId: $stateParams.mentorId
-            });
-        };
+        $scope.mentor = Mentors.get({
+            mentorId: $stateParams.mentorId
+        });`
+
     }
 ]);

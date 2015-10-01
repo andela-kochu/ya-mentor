@@ -1,5 +1,12 @@
-angular.module('mentees').controller('menteeCntrl', ['$scope','$stateParams', function($scope, $stateParams) {
+angular.module('mentees').controller('menteeCntrl', ['$scope','$stateParams', 'Mentees', function($scope, $stateParams, Mentees) {
   
+        $scope.mentees = Mentees.query();
+        $scope.findOne = function() {
+            $scope.mentee = Mentees.get({
+                menteeId: $stateParams.menteeId
+            });
+        };
+
   $scope.mentees = [
     {
       picture: '/modules/mentees/img/me1.jpg',
