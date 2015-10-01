@@ -8,6 +8,7 @@ module.exports = {
 			css: [
 				'public/lib/bootstrap/dist/css/bootstrap.min.css',
 				'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
+				'https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic'
 			],
 			js: [
 				'public/lib/angular/angular.min.js',
@@ -32,9 +33,9 @@ module.exports = {
 		callbackURL: 'https://localhost:443/auth/twitter/callback'
 	},
 	google: {
-		clientID: process.env.GOOGLE_ID || 'APP_ID',
-		clientSecret: process.env.GOOGLE_SECRET || 'APP_SECRET',
-		callbackURL: 'https://localhost:443/auth/google/callback'
+		clientID: process.env.GOOGLE_ID || '519503466645-cl1gct4e4avitoqkq30cp0n1q9kamll1.apps.googleusercontent.com',
+		clientSecret: process.env.GOOGLE_SECRET || 'BTr0-FlsRw3gTdtVr_UOMOXb',
+		callbackURL: '/auth/google/callback'
 	},
 	linkedin: {
 		clientID: process.env.LINKEDIN_ID || 'APP_ID',
