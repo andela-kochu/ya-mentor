@@ -23,10 +23,10 @@ module.exports = function(app) {
     .post(users.requiresLogin, mentors.requestMentor);
 
   app.route('/mentors/:mentorId/upvote')
-    .post(mentors.upvoteMentor);
+    .post(users.requiresLogin, mentors.upvoteMentor);
 
-  app.route('/mentors/:mentorId/downvote')
-    .post(mentors.downvoteMentor);
+  // app.route('/mentors/:mentorId/downvote')
+  //   .post(users.requiresLogin, mentors.downvoteMentor);
 
 
   app.route('/mentors/:mentorId/learners')
@@ -41,5 +41,7 @@ module.exports = function(app) {
 
   // Finish by binding the mentor middleware
   app.param('mentorId', mentors.mentorByID);
+
+  // app.param('requestId', mentors.requestByID);
 
 };
