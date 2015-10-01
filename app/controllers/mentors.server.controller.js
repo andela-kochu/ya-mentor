@@ -219,8 +219,7 @@ exports.declineRequest = function(req, res) {
     'requests._id': req.params.requestId,
     'requests.status': "pending"
   }
-
-  var update = { 'requests.$.status': "rejected" }
+  var update = { 'requests.$.status': "rejected"}
   Mentor.update(query, update, function(err, rawMessage) {
     if (err) {
       return res.status(400).send({
@@ -270,7 +269,6 @@ exports.upvoteMentor = function(req, res) {
   });
 };
 
-<<<<<<< HEAD
 // exports.downvoteMentor = function(req, res, next, id) {
 //   Mentor.findById(req.mentor.id, function(err, mentor) {
 //     if (err) {

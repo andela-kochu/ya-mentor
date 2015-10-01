@@ -7,7 +7,7 @@ angular.module('mentors').controller('MentorController', ['$scope', '$http', '$l
         $scope.mentors = Mentors.query();
         $scope.mentor = Mentors.get({
             mentorId: $stateParams.mentorId
-        });`
+        });
 
     }
 ]);
