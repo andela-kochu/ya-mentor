@@ -5,8 +5,8 @@ angular.module('mentees').config(['$stateProvider',
 	function($stateProvider) {
 		// mentees state routing
 		$stateProvider.
-		state('mentee-profile', {
-			url: '/settings/mentee-profile',
+		state('mentees/profile', {
+			url: '/settings/mentees/profile',
 			templateUrl: 'modules/mentees/views/settings/edit-profile.client.view.html'
 		}).
 		state('mentees/password', {
@@ -41,9 +41,9 @@ angular.module('mentees').config(['$stateProvider',
 			url: '/mentees/mentors',
 			templateUrl: 'modules/mentees/views/dashboard/dashboard.mentors.view.html'
 		}).
-		state('mentees/mentee', {
-			url: '/mentees/:mentee_id/mentees/profile',
-			templateUr: 'modules/mentees/views/dashboard/mentee_profile.view.html'
+		state('mentee', {
+			url: '/mentees/:mentee_id',
+			templateUrl: 'modules/mentees/views/dashboard/mentee_profile.client.view.html'
 		}).
 		state('mentees/reset', {
 			url: '/password/reset/:token',
