@@ -6,8 +6,8 @@ angular.module('mentors').factory('Mentors', ['$resource',
 		return $resource('mentors/:mentorId',  {
       mentorId: '@_id'
     }, {
-			update: {
-				method: 'PUT'
+			get: {
+				method: 'GET'
 			}
 		});
 	}
